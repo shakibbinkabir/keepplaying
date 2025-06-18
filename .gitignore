@@ -4,3 +4,6 @@ FIREFOX_STORE_GUIDE.md
 GITHUB_SETUP.md
 build.js
 package.json
+package-lock.json
+/node_modules/
+*.zip
