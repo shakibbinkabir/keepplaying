@@ -7,3 +7,4 @@ package.json
 package-lock.json
 /node_modules/
 *.zip
+GITHUB_RELEASE_GUIDE.md
