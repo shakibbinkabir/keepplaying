@@ -28,7 +28,7 @@ When you're watching videos on YouTube, ads, or any other media content, they of
 6. The extension will be installed and active immediately
 
 ### Firefox Add-ons
-*Coming soon*
+*Coming soon - Under Review*
 
 ### Manual Installation (Developer Mode)
 1. Download from releases or clone this repository
