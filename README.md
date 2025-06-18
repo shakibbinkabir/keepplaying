@@ -52,7 +52,7 @@ This extension is based on the original "Don't Make Me Watch" by **Wyatt Pearsal
 
 - **Original Author**: Wyatt Pearsall (@wpears)
 - **Original Extension**: [Don't Make Me Watch](https://github.com/wpears/dont)
-- **Modernized by**: [Shakib Bin Kabir] (2025)
+- **Modernized by**: Shakib Bin Kabir (2025)
 
 ## 📄 License
 
