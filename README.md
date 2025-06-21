@@ -28,14 +28,8 @@ When you're watching videos on YouTube, ads, or any other media content, they of
 6. The extension will be installed and active immediately
 
 ### Firefox Add-ons
-*Coming soon - Under Review*
+*[https://addons.mozilla.org/addon/keepplaying/](https://addons.mozilla.org/addon/keepplaying/)*
 
-### Manual Installation (Developer Mode)
-1. Download from releases or clone this repository
-2. Open Firefox and click the menu button and select `Add-ons` from the menu, or use the shortcut `Ctrl+Shift+A` (Windows/Linux) or `Cmd+Shift+A` (Mac)
-4. Click the gear (⚙️) in the top right and select `Install Add-on from File`
-5. Navigate to the folder containing the extension file (.xpi or .zip) and click open
-6. The extension will be installed and active immediately
 
 ## 🔧 Technical Details
 
