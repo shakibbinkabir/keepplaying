@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "KeepPlaying",
   "description": "Prevents videos and ads from pausing when you switch tabs by blocking the Page Visibility API",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "icons": {
     "16": "16.png",
     "48": "48.png",
