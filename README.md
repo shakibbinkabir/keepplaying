@@ -1,10 +1,10 @@
 # KeepPlaying
 
-A Chrome/Firefox extension that prevents videos, ads, and media from pausing when you switch tabs by blocking the Page Visibility API.
+A Chrome/Firefox extension that prevents videos, ads, and media from pausing when you switch tabs by blocking the Page Visibility API and deprecated Mutation Events.
 
 ## 🎯 What it does
 
-When you're watching videos on YouTube, ads, or any other media content, they often pause automatically when you switch to another tab. This extension prevents that behavior by blocking the browser's Page Visibility API, keeping your content playing in the background.
+When you're watching videos on YouTube, ads, or any other media content, they often pause automatically when you switch to another tab. This extension prevents that behavior by blocking the browser's Page Visibility API and deprecated Mutation Events, keeping your content playing in the background while also eliminating console warnings.
 
 ## ✨ Features
 
@@ -13,13 +13,22 @@ When you're watching videos on YouTube, ads, or any other media content, they of
 - 🛡️ No permissions required
 - 🌐 Works on all websites
 - 🔧 Updated for modern browsers (Manifest V3)
+- 🔇 Eliminates console warnings from deprecated Mutation Events
+- 🛠️ Blocks 6 deprecated DOM mutation events for improved compatibility
 
 ## 📦 Installation
 
 ### Chrome Web Store
 *Coming soon*
 
+### Firefox Add-ons
+🎉 **[Available on Firefox Add-ons](https://addons.mozilla.org/en-US/android/addon/keepplaying/)**
+
+Install directly from the Mozilla Firefox Add-ons store!
+
 ### Manual Installation (Developer Mode)
+
+#### Chrome
 1. Download from releases or clone this repository
 2. Unzip the file to a folder
 3. Open Chrome and go to `chrome://extensions/`
@@ -27,22 +36,20 @@ When you're watching videos on YouTube, ads, or any other media content, they of
 5. Click "Load unpacked" and select the extension folder
 6. The extension will be installed and active immediately
 
-### Firefox Add-ons
-*Coming soon - Under Review*
-
-### Manual Installation (Developer Mode)
+#### Firefox
 1. Download from releases or clone this repository
 2. Open Firefox and click the menu button and select `Add-ons` from the menu, or use the shortcut `Ctrl+Shift+A` (Windows/Linux) or `Cmd+Shift+A` (Mac)
-4. Click the gear (⚙️) in the top right and select `Install Add-on from File`
-5. Navigate to the folder containing the extension file (.xpi or .zip) and click open
-6. The extension will be installed and active immediately
+3. Click the gear (⚙️) in the top right and select `Install Add-on from File`
+4. Navigate to the folder containing the extension file (.xpi or .zip) and click open
+5. The extension will be installed and active immediately
 
 ## 🔧 Technical Details
 
 This extension works by:
-1. Overriding `EventTarget.prototype.addEventListener` to ignore visibility change events
+1. Overriding `EventTarget.prototype.addEventListener` to ignore visibility change events and deprecated mutation events
 2. Overriding document properties like `visibilityState` and `hidden`
 3. Blocking both standard and webkit-prefixed visibility APIs
+4. Silently blocking deprecated Mutation Events (DOMSubtreeModified, DOMNodeInserted, DOMNodeRemoved, DOMNodeRemovedFromDocument, DOMNodeInsertedIntoDocument, DOMCharacterDataModified)
 
 The extension uses Manifest V3 for Chrome and is compatible with Firefox through WebExtensions API.
 
@@ -64,6 +71,14 @@ Found a bug or want to contribute? Please open an issue or submit a pull request
 
 ## 🔄 Changelog
 
+See [CHANGELOG.md](CHANGELOG.md) for detailed version history.
+
+### v3.0.1 (2025-07-19)
+- **NEW**: Blocks deprecated Mutation Events to eliminate console warnings
+- **NEW**: Enhanced compatibility with modern websites using deprecated DOM APIs
+- **IMPROVED**: Consolidated event blocking logic for better maintainability
+- **FIXED**: Console warnings about DOMNodeInserted and other deprecated events
+
 ### v3.0.0 (2025)
 - Updated to Manifest V3
 - Improved API blocking coverage
@@ -71,6 +86,6 @@ Found a bug or want to contribute? Please open an issue or submit a pull request
 - Modern JavaScript implementation
 - Enhanced property overrides
 
-### v2.0.0 (Original)
+### Legacy (Original)
 - Original implementation by Wyatt Pearsall
 - Basic Page Visibility API blocking
