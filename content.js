@@ -1,7 +1,6 @@
 /**
  * KeepPlaying - Content Script
  * Blocks the Page Visibility API to prevent videos/ads from pausing when switching tabs
- * Also blocks deprecated Mutation Events to prevent console warnings
  * 
  * Original concept by Wyatt Pearsall (@wpears)
  * Modernized and maintained by [Shakib Bin Kabir]
@@ -13,22 +12,10 @@
   // Store the original addEventListener function
   const originalAddEventListener = EventTarget.prototype.addEventListener;
   
-  // List of deprecated mutation events to block (in addition to visibility events)
-  const deprecatedEvents = [
-    'visibilitychange',
-    'webkitvisibilitychange',
-    'DOMSubtreeModified',
-    'DOMNodeInserted',
-    'DOMNodeRemoved',
-    'DOMNodeRemovedFromDocument',
-    'DOMNodeInsertedIntoDocument',
-    'DOMCharacterDataModified'
-  ];
-  
-  // Override addEventListener to block visibility change events and deprecated mutation events
+  // Override addEventListener to block visibility change events
   EventTarget.prototype.addEventListener = function(type, listener, options) {
-    // Block visibility change events and deprecated mutation events
-    if (deprecatedEvents.includes(type)) {
+    // Block both standard and webkit visibility change events
+    if (type === 'visibilitychange' || type === 'webkitvisibilitychange') {
       // Silently ignore these event listeners
       return;
     }
@@ -40,7 +27,7 @@
   // Also override the document.addEventListener specifically for extra coverage
   const originalDocumentAddEventListener = Document.prototype.addEventListener;
   Document.prototype.addEventListener = function(type, listener, options) {
-    if (deprecatedEvents.includes(type)) {
+    if (type === 'visibilitychange' || type === 'webkitvisibilitychange') {
       return;
     }
     return originalDocumentAddEventListener.call(this, type, listener, options);
@@ -76,5 +63,5 @@
     configurable: true
   });
   
-  console.log('KeepPlaying: Page Visibility API and deprecated Mutation Events blocked successfully');
+  console.log('KeepPlaying: Page Visibility API blocked successfully');
 })();

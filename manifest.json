@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "KeepPlaying",
-  "description": "Prevents videos and ads from pausing when you switch tabs by blocking the Page Visibility API and deprecated Mutation Events",
-  "version": "3.0.1",
+  "description": "Prevents videos and ads from pausing when you switch tabs by blocking the Page Visibility API",
+  "version": "3.0.0",
   "icons": {
     "16": "16.png",
     "48": "48.png",
