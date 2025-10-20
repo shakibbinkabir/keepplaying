@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.0] - 2025-10-20
+
+### Added
+- Blocking of 'unload', 'beforeunload', and 'pagehide' events to prevent permissions policy violations
+- Enhanced support for Google Ads and other iframe-based content (SafeFrame, etc.)
+- Improved documentation with clearer event categorization
+
+### Fixed
+- **CRITICAL**: Fixed "Permissions policy violation: unload is not allowed in this document" error on YouTube and other sites
+- Prevented browser console errors when pages attempt to register blocked lifecycle events
+- Enhanced compatibility with modern websites using strict permissions policies
+
+### Changed
+- Renamed `deprecatedEvents` to `blockedEvents` for better clarity
+- Reorganized blocked events list with clear categorization (visibility, lifecycle, mutation)
+- Updated console log message to reflect all blocked event types
+
 ## [3.0.1] - 2025-07-19
 
 ### Added

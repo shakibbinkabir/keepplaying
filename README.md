@@ -11,10 +11,11 @@ When you're watching videos on YouTube, ads, or any other media content, they of
 - 🔄 Keeps videos and ads playing when switching tabs
 - 🚀 Lightweight and fast (runs at document start)
 - 🛡️ No permissions required
-- 🌐 Works on all websites
+- 🌐 Works on all websites including Google Ads and iframes
 - 🔧 Updated for modern browsers (Manifest V3)
 - 🔇 Eliminates console warnings from deprecated Mutation Events
-- 🛠️ Blocks 6 deprecated DOM mutation events for improved compatibility
+- ⚡ Prevents permissions policy violations (unload, beforeunload, pagehide)
+- 🛠️ Blocks multiple event types for comprehensive protection
 
 ## 📦 Installation
 
@@ -46,12 +47,13 @@ Install directly from the Mozilla Firefox Add-ons store!
 ## 🔧 Technical Details
 
 This extension works by:
-1. Overriding `EventTarget.prototype.addEventListener` to ignore visibility change events and deprecated mutation events
+1. Overriding `EventTarget.prototype.addEventListener` to ignore visibility change events, page lifecycle events, and deprecated mutation events
 2. Overriding document properties like `visibilityState` and `hidden`
 3. Blocking both standard and webkit-prefixed visibility APIs
-4. Silently blocking deprecated Mutation Events (DOMSubtreeModified, DOMNodeInserted, DOMNodeRemoved, DOMNodeRemovedFromDocument, DOMNodeInsertedIntoDocument, DOMCharacterDataModified)
+4. Silently blocking page lifecycle events (unload, beforeunload, pagehide) to prevent permissions policy violations
+5. Silently blocking deprecated Mutation Events (DOMSubtreeModified, DOMNodeInserted, DOMNodeRemoved, DOMNodeRemovedFromDocument, DOMNodeInsertedIntoDocument, DOMCharacterDataModified)
 
-The extension uses Manifest V3 for Chrome and is compatible with Firefox through WebExtensions API.
+The extension uses Manifest V3 for Chrome and is compatible with Firefox through WebExtensions API. It runs in the MAIN world context, which ensures it works in all frames including Google Ads SafeFrames.
 
 ## 🤝 Credits
 
@@ -72,6 +74,13 @@ Found a bug or want to contribute? Please open an issue or submit a pull request
 ## 🔄 Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for detailed version history.
+
+### v3.1.0 (2025-10-20)
+- **CRITICAL FIX**: Resolved "Permissions policy violation: unload is not allowed" error
+- **NEW**: Blocks unload, beforeunload, and pagehide events to prevent policy violations
+- **IMPROVED**: Enhanced support for Google Ads and iframe-based content (SafeFrame)
+- **IMPROVED**: Better compatibility with modern websites using strict permissions policies
+- **IMPROVED**: Clearer event categorization and documentation
 
 ### v3.0.1 (2025-07-19)
 - **NEW**: Blocks deprecated Mutation Events to eliminate console warnings
