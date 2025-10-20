@@ -8,19 +8,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.1.0] - 2025-10-20
 
 ### Added
+- **CRITICAL**: Added `all_frames: true` to manifest to inject content script into all iframes and SafeFrames (required for Google Ads)
+- Blocking of 'blur', 'focus', 'focusin', and 'focusout' events to prevent ads from detecting focus loss
+- Override of `document.hasFocus()` to always return true
 - Blocking of 'unload', 'beforeunload', and 'pagehide' events to prevent permissions policy violations
 - Enhanced support for Google Ads and other iframe-based content (SafeFrame, etc.)
 - Improved documentation with clearer event categorization
 
 ### Fixed
+- **CRITICAL**: Fixed Google Ads not continuing to play when switching tabs (missing all_frames configuration)
 - **CRITICAL**: Fixed "Permissions policy violation: unload is not allowed in this document" error on YouTube and other sites
 - Prevented browser console errors when pages attempt to register blocked lifecycle events
 - Enhanced compatibility with modern websites using strict permissions policies
 
 ### Changed
 - Renamed `deprecatedEvents` to `blockedEvents` for better clarity
-- Reorganized blocked events list with clear categorization (visibility, lifecycle, mutation)
+- Reorganized blocked events list with clear categorization (visibility, focus, lifecycle, mutation)
 - Updated console log message to reflect all blocked event types
+- Now blocks 15 event types total (up from 8)
 
 ## [3.0.1] - 2025-07-19
 
