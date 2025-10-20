@@ -11,10 +11,11 @@ When you're watching videos on YouTube, ads, or any other media content, they of
 - 🔄 Keeps videos and ads playing when switching tabs
 - 🚀 Lightweight and fast (runs at document start)
 - 🛡️ No permissions required
-- 🌐 Works on all websites
+- 🌐 Works on all websites including Google Ads and iframes
 - 🔧 Updated for modern browsers (Manifest V3)
 - 🔇 Eliminates console warnings from deprecated Mutation Events
-- 🛠️ Blocks 6 deprecated DOM mutation events for improved compatibility
+- ⚡ Prevents permissions policy violations (unload, beforeunload, pagehide)
+- 🛠️ Blocks multiple event types for comprehensive protection
 
 ## 📦 Installation
 
@@ -46,12 +47,15 @@ Install directly from the Mozilla Firefox Add-ons store!
 ## 🔧 Technical Details
 
 This extension works by:
-1. Overriding `EventTarget.prototype.addEventListener` to ignore visibility change events and deprecated mutation events
-2. Overriding document properties like `visibilityState` and `hidden`
-3. Blocking both standard and webkit-prefixed visibility APIs
-4. Silently blocking deprecated Mutation Events (DOMSubtreeModified, DOMNodeInserted, DOMNodeRemoved, DOMNodeRemovedFromDocument, DOMNodeInsertedIntoDocument, DOMCharacterDataModified)
+1. Overriding `EventTarget.prototype.addEventListener` to ignore visibility change events, focus/blur events, page lifecycle events, and deprecated mutation events
+2. Overriding document properties like `visibilityState` and `hidden` to always return "visible" and false
+3. Overriding `document.hasFocus()` to always return true
+4. Blocking both standard and webkit-prefixed visibility APIs
+5. Silently blocking focus/blur events (blur, focus, focusin, focusout) used by ads to detect when user switches tabs
+6. Silently blocking page lifecycle events (unload, beforeunload, pagehide) to prevent permissions policy violations
+7. Silently blocking deprecated Mutation Events (DOMSubtreeModified, DOMNodeInserted, DOMNodeRemoved, DOMNodeRemovedFromDocument, DOMNodeInsertedIntoDocument, DOMCharacterDataModified)
 
-The extension uses Manifest V3 for Chrome and is compatible with Firefox through WebExtensions API.
+The extension uses Manifest V3 for Chrome and is compatible with Firefox through WebExtensions API. It runs in the MAIN world context with `all_frames: true`, which ensures it works in all frames including Google Ads SafeFrames and cross-origin iframes.
 
 ## 🤝 Credits
 
@@ -72,6 +76,17 @@ Found a bug or want to contribute? Please open an issue or submit a pull request
 ## 🔄 Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for detailed version history.
+
+### v3.1.0 (2025-10-20)
+- **CRITICAL FIX**: Resolved Google Ads not playing when switching tabs (added `all_frames: true` to manifest)
+- **CRITICAL FIX**: Resolved "Permissions policy violation: unload is not allowed" error
+- **NEW**: Blocks blur/focus events (blur, focus, focusin, focusout) to prevent ads from detecting focus loss
+- **NEW**: Overrides `document.hasFocus()` to always return true
+- **NEW**: Blocks unload, beforeunload, and pagehide events to prevent policy violations
+- **IMPROVED**: Enhanced support for Google Ads and iframe-based content (SafeFrame)
+- **IMPROVED**: Better compatibility with modern websites using strict permissions policies
+- **IMPROVED**: Clearer event categorization and documentation
+- **IMPROVED**: Now blocks 15 event types total for comprehensive protection
 
 ### v3.0.1 (2025-07-19)
 - **NEW**: Blocks deprecated Mutation Events to eliminate console warnings

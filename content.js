@@ -1,7 +1,16 @@
 /**
  * KeepPlaying - Content Script
- * Blocks the Page Visibility API to prevent videos/ads from pausing when switching tabs
- * Also blocks deprecated Mutation Events to prevent console warnings
+ * Prevents videos/ads from pausing when switching tabs
+ * 
+ * Blocks:
+ * - Page Visibility API (visibilitychange events)
+ * - Focus/blur events (focus, blur, focusin, focusout)
+ * - Page lifecycle events (unload, beforeunload, pagehide) to prevent policy violations
+ *   Note: These are blocked because in certain contexts (e.g., YouTube with ads),
+ *   attempting to register these listeners causes permissions policy errors.
+ *   Most modern websites use visibilitychange instead of these legacy events.
+ * - Deprecated Mutation Events to prevent console warnings
+ * - Overrides document.hasFocus() to always return true
  * 
  * Original concept by Wyatt Pearsall (@wpears)
  * Modernized and maintained by [Shakib Bin Kabir]
@@ -13,10 +22,29 @@
   // Store the original addEventListener function
   const originalAddEventListener = EventTarget.prototype.addEventListener;
   
-  // List of deprecated mutation events to block (in addition to visibility events)
-  const deprecatedEvents = [
+  // List of events to block:
+  // - Visibility events: prevent pausing when tab is hidden
+  // - Focus/blur events: prevent pausing when window loses focus
+  // - Lifecycle events: prevent permissions policy violations when pages try to
+  //   register listeners in restricted contexts (e.g., SafeFrames, cross-origin iframes)
+  // - Deprecated mutation events: prevent console warnings
+  const blockedEvents = [
+    // Visibility API events
     'visibilitychange',
     'webkitvisibilitychange',
+    // Focus events (used by ads to detect when user switches tabs/windows)
+    'blur',
+    'focus',
+    'focusin',
+    'focusout',
+    // Page lifecycle events (prevent permissions policy violations in restricted contexts)
+    // Note: These are only blocked to prevent console errors when pages attempt to register
+    // listeners in contexts where permissions policy doesn't allow them (like SafeFrames).
+    // The actual page lifecycle is not affected.
+    'unload',
+    'beforeunload',
+    'pagehide',
+    // Deprecated Mutation Events
     'DOMSubtreeModified',
     'DOMNodeInserted',
     'DOMNodeRemoved',
@@ -25,10 +53,10 @@
     'DOMCharacterDataModified'
   ];
   
-  // Override addEventListener to block visibility change events and deprecated mutation events
+  // Override addEventListener to block specified events
   EventTarget.prototype.addEventListener = function(type, listener, options) {
-    // Block visibility change events and deprecated mutation events
-    if (deprecatedEvents.includes(type)) {
+    // Block events that would cause pausing or policy violations
+    if (blockedEvents.includes(type)) {
       // Silently ignore these event listeners
       return;
     }
@@ -40,7 +68,7 @@
   // Also override the document.addEventListener specifically for extra coverage
   const originalDocumentAddEventListener = Document.prototype.addEventListener;
   Document.prototype.addEventListener = function(type, listener, options) {
-    if (deprecatedEvents.includes(type)) {
+    if (blockedEvents.includes(type)) {
       return;
     }
     return originalDocumentAddEventListener.call(this, type, listener, options);
@@ -76,5 +104,11 @@
     configurable: true
   });
   
-  console.log('KeepPlaying: Page Visibility API and deprecated Mutation Events blocked successfully');
+  // Override document.hasFocus() to always return true
+  const originalHasFocus = Document.prototype.hasFocus;
+  Document.prototype.hasFocus = function() {
+    return true;
+  };
+  
+  console.log('KeepPlaying: Blocked events for continuous playback - visibility, unload, and mutation events');
 })();
