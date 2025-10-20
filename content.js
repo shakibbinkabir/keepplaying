@@ -5,6 +5,9 @@
  * Blocks:
  * - Page Visibility API (visibilitychange events)
  * - Page lifecycle events (unload, beforeunload, pagehide) to prevent policy violations
+ *   Note: These are blocked because in certain contexts (e.g., YouTube with ads),
+ *   attempting to register these listeners causes permissions policy errors.
+ *   Most modern websites use visibilitychange instead of these legacy events.
  * - Deprecated Mutation Events to prevent console warnings
  * 
  * Original concept by Wyatt Pearsall (@wpears)
@@ -19,13 +22,17 @@
   
   // List of events to block:
   // - Visibility events: prevent pausing when tab is hidden
-  // - Unload events: prevent permissions policy violations
+  // - Lifecycle events: prevent permissions policy violations when pages try to
+  //   register listeners in restricted contexts (e.g., SafeFrames, cross-origin iframes)
   // - Deprecated mutation events: prevent console warnings
   const blockedEvents = [
     // Visibility API events
     'visibilitychange',
     'webkitvisibilitychange',
-    // Page lifecycle events (prevent permissions policy violations)
+    // Page lifecycle events (prevent permissions policy violations in restricted contexts)
+    // Note: These are only blocked to prevent console errors when pages attempt to register
+    // listeners in contexts where permissions policy doesn't allow them (like SafeFrames).
+    // The actual page lifecycle is not affected.
     'unload',
     'beforeunload',
     'pagehide',
